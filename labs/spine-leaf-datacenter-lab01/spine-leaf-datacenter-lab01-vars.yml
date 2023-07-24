@@ -1,0 +1,18 @@
+---
+links:
+  - endpoints: ["spine01:eth1", "spine02:eth1"]
+  - endpoints: ["spine01:eth2", "leaf01:eth2"]
+  - endpoints: ["spine01:eth3", "leaf02:eth2"]
+  - endpoints: ["spine01:eth4", "leaf03:eth2"]
+  - endpoints: ["spine01:eth5", "leaf04:eth2"]
+  - endpoints: ["spine01:eth6", "spine02:eth6"]
+  - endpoints: ["spine02:eth2", "leaf01:eth3"]
+  - endpoints: ["spine02:eth3", "leaf02:eth3"]
+  - endpoints: ["spine02:eth4", "leaf03:eth3"]
+  - endpoints: ["spine02:eth5", "leaf04:eth3"]
+  - endpoints: ["leaf01:eth1", "leaf02:eth1"]
+  - endpoints: ["leaf01:eth6", "leaf02:eth6"]
+  - endpoints: ["leaf03:eth1", "leaf04:eth1"]
+  - endpoints: ["leaf03:eth6", "leaf04:eth6"]
+  - endpoints: ["client01:eth1", "leaf01:eth4"]
+  - endpoints: ["client02:eth1", "leaf04:eth4"]

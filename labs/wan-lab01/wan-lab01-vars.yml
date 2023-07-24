@@ -1,0 +1,18 @@
+---
+links:
+  - endpoints: ["site02-r01:eth1", "site02-r02:eth1"]
+  - endpoints: ["site02-r01:eth2", "site02-r02:eth2"]
+  - endpoints: ["site02-r01:eth3", "site01-r01:eth3"]
+  - endpoints: ["site02-r01:eth4", "site05-r01:eth4"]
+  - endpoints: ["site02-r01:eth5", "site03-r01:eth5"]
+  - endpoints: ["site02-r02:eth3", "site01-r02:eth3"]
+  - endpoints: ["site02-r02:eth4", "site04-r02:eth4"]
+  - endpoints: ["site02-r02:eth5", "site03-r02:eth5"]
+  - endpoints: ["site01-r01:eth1", "site01-r02:eth1"]
+  - endpoints: ["site01-r01:eth2", "site01-r02:eth2"]
+  - endpoints: ["site01-r01:eth5", "site05-r01:eth5"]
+  - endpoints: ["site03-r01:eth1", "site03-r02:eth1"]
+  - endpoints: ["site03-r01:eth2", "site03-r02:eth2"]
+  - endpoints: ["site03-r01:eth6", "site05-r01:eth6"]
+  - endpoints: ["site04-r01:eth1", "site04-r02:eth1"]
+  - endpoints: ["site04-r01:eth2", "site04-r02:eth2"]

@@ -1,0 +1,57 @@
+name: {{ lab_title }}-{{ lab_username }}
+prefix: ""
+topology:
+  nodes:
+    {{ lab_title }}-{{ lab_username }}-site02-r01:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}01:22"
+    {{ lab_title }}-{{ lab_username }}-site02-r02:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}02:22"
+    {{ lab_title }}-{{ lab_username }}-site01-r01:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}03:22"
+    {{ lab_title }}-{{ lab_username }}-site01-r02:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}04:22"
+    {{ lab_title }}-{{ lab_username }}-site03-r01:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}05:22"
+    {{ lab_title }}-{{ lab_username }}-site03-r02:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}06:22"
+    {{ lab_title }}-{{ lab_username }}-site04-r01:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}07:22"
+    {{ lab_title }}-{{ lab_username }}-site04-r02:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}08:22"
+    {{ lab_title }}-{{ lab_username }}-site05-r01:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}09:22"
+  links:
+    {%for link in links %}
+    - endpoints: [{{ lab_title }}-{{ lab_username }}-{{link['endpoints'][0]}},{{ lab_title }}-{{ lab_username }}-{{link['endpoints'][1]}}]
+    {% endfor %}
+
+mgmt:
+  network: "{{ lab_title }}-{{ lab_username }}-network"
+  ipv4-subnet: "{{ ipv4_subnet | ansible.utils.ipaddr }}"

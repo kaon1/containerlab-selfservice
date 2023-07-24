@@ -1,0 +1,11 @@
+---
+links:
+  - endpoints: ["core01:eth1", "core02:eth1"]
+  - endpoints: ["core01:eth2", "core02:eth2"]
+  - endpoints: ["core01:eth3", "access01:eth1"]
+  - endpoints: ["core01:eth4", "access02:eth1"]
+  - endpoints: ["core02:eth3", "access01:eth2"]
+  - endpoints: ["core02:eth4", "access02:eth2"]
+  - endpoints: ["server01:eth1", "core01:eth5"]
+  - endpoints: ["server01:eth2", "core02:eth5"]
+  - endpoints: ["client01:eth1", "access01:eth3"]

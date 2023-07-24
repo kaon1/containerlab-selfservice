@@ -1,0 +1,132 @@
+name: {{ lab_title }}-{{ lab_username }}
+prefix: ""
+topology:
+  nodes:
+    {{ lab_title }}-{{ lab_username }}-r1:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}01:22"
+
+    {{ lab_title }}-{{ lab_username }}-r2:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}02:22"
+
+    {{ lab_title }}-{{ lab_username }}-r3:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}03:22"
+
+    {{ lab_title }}-{{ lab_username }}-r4:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}04:22"
+
+    {{ lab_title }}-{{ lab_username }}-r5:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}05:22"
+
+    {{ lab_title }}-{{ lab_username }}-r6:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}06:22"
+
+    {{ lab_title }}-{{ lab_username }}-r7:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}07:22"
+
+    {{ lab_title }}-{{ lab_username }}-r8:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}08:22"
+
+    {{ lab_title }}-{{ lab_username }}-r9:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}09:22"
+
+    {{ lab_title }}-{{ lab_username }}-r10:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}10:22"
+
+    {{ lab_title }}-{{ lab_username }}-r11:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}11:22"
+
+    {{ lab_title }}-{{ lab_username }}-r12:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}12:22"
+
+    {{ lab_title }}-{{ lab_username }}-r13:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}13:22"
+
+    {{ lab_title }}-{{ lab_username }}-r14:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}14:22"
+
+    {{ lab_title }}-{{ lab_username }}-r15:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}15:22"
+
+    {{ lab_title }}-{{ lab_username }}-r16:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}16:22"
+
+    {{ lab_title }}-{{ lab_username }}-r20:
+      kind: "{{ router_container_kind }}"
+      image: "{{ router_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}20:22"
+
+    {{ lab_title }}-{{ lab_username }}-c17:
+      kind: "{{ host_container_kind }}"
+      image: "{{ host_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}17:22"
+
+    {{ lab_title }}-{{ lab_username }}-c18:
+      kind: "{{ host_container_kind }}"
+      image: "{{ host_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}18:22"
+
+    {{ lab_title }}-{{ lab_username }}-w19:
+      kind: "{{ host_container_kind }}"
+      image: "{{ host_container_kind }}:latest"
+      ports:
+        - "5{{ user_map[lab_username] }}19:22"
+
+  links:
+    {%for link in links %}
+    - endpoints: [{{ lab_title }}-{{ lab_username }}-{{link['endpoints'][0]}},{{ lab_title }}-{{ lab_username }}-{{link['endpoints'][1]}}]
+    {% endfor %}
+
+mgmt:
+  network: "{{ lab_title }}-{{ lab_username }}-network"
+  ipv4-subnet: "{{ ipv4_subnet | ansible.utils.ipaddr }}"

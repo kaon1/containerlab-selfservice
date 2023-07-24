@@ -1,0 +1,39 @@
+---
+- name: Service to Shutdown Long Running ContainerLabs
+  gather_facts: false
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Grab List of All Running ContainerLab Docker Instances
+      ansible.builtin.command:
+        chdir: /opt/containerlab/
+        cmd: containerlab inspect -a --details -f json
+      register: containerlab_inspect
+
+    - name: Loop through and inspect each ID
+      ansible.builtin.command:
+        chdir: /opt/containerlab/
+        cmd: "docker inspect {{ item['ShortID']}}"
+      register: docker_inspect_raw
+      with_items: "{{containerlab_inspect.stdout}}"
+      loop_control:
+        label: "{{ item['ShortID']}}"
+
+    - name: Create ID to Creation timestamp dictionary mapping
+      set_fact:
+        timestamps: "{{ timestamps | default({}) | combine( {item.item.Labels['clab-topo-file']: item.stdout | from_json | json_query('[0].Created')}) }}"
+      with_items: "{{docker_inspect_raw.results}}"
+      loop_control:
+        label: "{{item.cmd[2]}}"
+
+    - name: custom filter
+      set_fact:
+        list_to_shutdown: "{{ timestamps | timestamp_differ }}"
+
+    - name: Loop through and shutdown long running labs
+      ansible.builtin.command:
+        chdir: /opt/containerlab/
+        cmd: "containerlab destroy -t {{ item }}"
+      with_items: "{{list_to_shutdown}}"
+      loop_control:
+        label: "{{ item}}"

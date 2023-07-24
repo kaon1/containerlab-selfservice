@@ -1,0 +1,97 @@
+---
+- name: Container Lab Engine for Self Service Labs
+  gather_facts: false
+  hosts: "{{ lab_hosts }}"
+  become: yes
+  vars_files:
+  - "{{ lab_title }}/{{ lab_title }}-vars.yml"
+  - base_vars.yml
+  tasks:
+    ### Create User and Lab specific directory on remote linux server hosting containerlab
+    - name: Create User Specific Lab Directory
+      file:
+        path: "/opt/containerlab/labs/{{ lab_username }}/{{ lab_title }}"
+        state: directory
+      when: '"deploy" in actions'
+
+    ### Declare unique Subnet Per user to be used later for Docker Container network
+    - name: Set CLAB Docker IP Network for Each User
+      set_fact:
+        ipv4_subnet: 172.100.{{ user_map[lab_username] }}.0/24
+      changed_when: false
+      when: '"deploy" in actions'
+
+    ### Use local topology jinja2 file to build remote containerlab topology file with per user/lab variables
+    - name: Build Lab Topology File
+      ansible.builtin.template:
+        src: "{{ lab_title }}/{{ lab_title }}.j2"
+        dest: "/opt/containerlab/labs/{{ lab_username }}/{{ lab_title }}/{{lab_title}}-{{ lab_username }}.clab.yml"
+      when: '"deploy" in actions'
+
+    ### Run Container Lab Deploy to build lab from .clab.yaml topology file
+    - name: Deploy Lab File
+      ansible.builtin.command:
+        chdir: /opt/containerlab/labs/{{ lab_username }}/{{ lab_title }}
+        cmd: containerlab deploy
+      when: '"deploy" in actions'
+
+    ### Show All Docker Containers Running By current User
+    - name: Show Docker Containers
+      ansible.builtin.command:
+        chdir: /opt/containerlab/labs/{{ lab_username }}/{{ lab_title }}
+        cmd: docker container ls -f name={{lab_username}}
+      register: docker_output
+      when: ("deploy" in actions) or ("inspect" in actions)
+
+    - name: Print Docker Output
+      ansible.builtin.debug:
+        msg: "{{ docker_output.stdout_lines }}"
+      when:
+        - docker_output is defined
+        - ("deploy" in actions) or ("inspect" in actions)
+
+    ### Inspect containerlab info for current user and lab
+    - name: Inspect Lab Topology
+      ansible.builtin.command:
+        chdir: /opt/containerlab/labs/{{ lab_username }}/{{ lab_title }}
+        cmd: containerlab inspect
+      register: deploy_output
+      when: ("deploy" in actions) or ("inspect" in actions)
+
+    - name: Print Lab Topology Output
+      ansible.builtin.debug:
+        msg: "{{ deploy_output.stdout_lines }}"
+      when:
+        - deploy_output is defined
+        - ("deploy" in actions) or ("inspect" in actions)
+
+    ### Powerdown lab nodes while maintaining startup configuration
+    - name: Shutdown Lab
+      ansible.builtin.command:
+        chdir: /opt/containerlab/labs/{{ lab_username }}/{{ lab_title }}
+        cmd: containerlab destroy
+      when: '"shutdown" in actions'
+
+    ### Powerdown and delete all startup configuration of nodes
+    - name: Destroy Lab
+      ansible.builtin.command:
+        chdir: /opt/containerlab/labs/{{ lab_username }}/{{ lab_title }}
+        cmd: containerlab destroy -c
+      when: '"destroy" in actions'
+
+    ### Run containerlab save on all nodes to save startup configs locally
+    - name: Save Lab
+      ansible.builtin.command:
+        chdir: /opt/containerlab/labs/{{ lab_username }}/{{ lab_title }}
+        cmd: containerlab save
+      when: '"save" in actions'
+
+    - name: Print Instructions
+      ansible.builtin.debug:
+        msg:
+          - "to connect to your Containers: ssh clab@{{inventory_hostname}}:5{{ user_map[lab_username] }}XX"
+          - "to create IP interface on a linux container. First SSH then RUN command: sudo ifconfig <interface> <ip> netmask <mask>"
+          - "to capture traffic and redirect locally to windows wireshark: {{ wireshark_command }}"
+      when:
+        - deploy_output is defined
+        - ("deploy" in actions) or ("inspect" in actions)

@@ -1,0 +1,5 @@
+Locate vendor container image
+Upload to server
+run docker import
+example:
+docker import cEOS-lab-4.29.3M.tar ceos:latest
