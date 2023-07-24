@@ -1,0 +1,1 @@
+While watching [Nick Russo's](https://twitter.com/nickrusso42518) PluralSight Course, I thought it would be a good idea to create a containerlab version of his topology. https://www.pluralsight.com/courses/cisco-advanced-routing-leaf-spine-data-centers
